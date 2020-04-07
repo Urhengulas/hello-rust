@@ -1,14 +1,24 @@
-#[derive(Debug)]
-struct Person<'a> {
-    name: &'a str,
-    age: u8,
-}
-
+#![allow(unused_variables)]
 fn main() {
-    let name = "Peter";
-    let age = 27;
-    let peter = Person { name, age };
+    // Import (via `use`) the `fmt` module to make it available.
+    use std::fmt;
 
-    // Pretty print
-    println!("{:#?}", peter);
+    // Define a structure for which `fmt::Display` will be implemented. This is
+    // a tuple struct named `Structure` that contains an `i32`.
+    struct Structure(i32);
+
+    // To use the `{}` marker, the trait `fmt::Display` must be implemented
+    // manually for the type.
+    impl fmt::Display for Structure {
+        // This trait requires `fmt` with this exact signature.
+        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+            // Write strictly the first element into the supplied output
+            // stream: `f`. Returns `fmt::Result` which indicates whether the
+            // operation succeeded or failed. Note that `write!` uses syntax which
+            // is very similar to `println!`.
+            write!(f, "--> {} <--", self.0)
+        }
+    }
+
+    println!("{}", Structure(5))
 }
