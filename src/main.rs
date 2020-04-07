@@ -1,24 +1,29 @@
-#![allow(unused_variables)]
+use std::fmt; // Import `fmt`
+
+struct Complex {
+	real: f64,
+	imag: f64,
+}
+impl fmt::Display for Complex {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		// Customize so only `x` and `y` are denoted.
+		write!(f, "{} + {}i", self.real, self.imag)
+	}
+}
+impl fmt::Debug for Complex {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		// Customize so only `x` and `y` are denoted.
+		write!(f, "{{ real: {}, imag: {} }}", self.real, self.imag)
+	}
+}
+
 fn main() {
-    // Import (via `use`) the `fmt` module to make it available.
-    use std::fmt;
+	let complex = Complex {
+		real: 3.3,
+		imag: 7.2,
+	};
 
-    // Define a structure for which `fmt::Display` will be implemented. This is
-    // a tuple struct named `Structure` that contains an `i32`.
-    struct Structure(i32);
-
-    // To use the `{}` marker, the trait `fmt::Display` must be implemented
-    // manually for the type.
-    impl fmt::Display for Structure {
-        // This trait requires `fmt` with this exact signature.
-        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-            // Write strictly the first element into the supplied output
-            // stream: `f`. Returns `fmt::Result` which indicates whether the
-            // operation succeeded or failed. Note that `write!` uses syntax which
-            // is very similar to `println!`.
-            write!(f, "--> {} <--", self.0)
-        }
-    }
-
-    println!("{}", Structure(5))
+	println!("Display: {}", complex);
+	println!("Debug: {:#?}", complex);
+	// println!("What does Point2D look like in binary: {:b}?", point);
 }
