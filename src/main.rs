@@ -1,33 +1,41 @@
-use std::fmt; // Import the `fmt` module.
+use std::fmt;
 
-// Define a structure named `List` containing a `Vec`.
-struct List(Vec<i32>);
-
-impl fmt::Display for List {
+#[derive(Debug)]
+struct Color {
+	red: u8,
+	green: u8,
+	blue: u8,
+}
+impl fmt::Display for Color {
 	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-		// Extract the value using tuple indexing,
-		// and create a reference to `vec`.
-		let vec = &self.0;
-
-		write!(f, "[")?;
-
-		// Iterate over `v` in `vec` while enumerating the iteration
-		// count in `count`.
-		for (count, v) in vec.iter().enumerate() {
-			// For every element except the first, add a comma.
-			// Use the ? operator, or try!, to return on errors.
-			if count != 0 {
-				write!(f, ", ")?;
-			}
-			write!(f, "{}: {}", count, v)?;
-		}
-
-		// Close the opened bracket and return a fmt::Result value.
-		write!(f, "]")
+		write!(f, "RGB ")?;
+		write!(f, "({}, {}, {}) ", self.red, self.green, self.blue)?;
+		write!(f, "0x{:02X}{:02X}{:02X}", self.red, self.green, self.blue)
 	}
 }
 
 fn main() {
-	let v = List(vec![3, 2, 1, 0, -1]);
-	println!("{}", v);
+	for color in [
+		Color {
+			red: 128,
+			green: 255,
+			blue: 90,
+		},
+		Color {
+			red: 0,
+			green: 3,
+			blue: 254,
+		},
+		Color {
+			red: 0,
+			green: 0,
+			blue: 0,
+		},
+	]
+	.iter()
+	{
+		// Switch this to use {} once you've added an implementation
+		// for fmt::Display.
+		println!("{}", *color);
+	}
 }
