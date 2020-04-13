@@ -8,22 +8,33 @@ fn main() {
 
 	let secret_number = dbg!(rand::thread_rng().gen_range(1, 101));
 
-	println!("Please input your guess.");
+	loop {
+		println!("Please input your guess.");
 
-	// # faq
-	// difference std::string::String and &str (https://stackoverflow.com/a/24159933)
-	// -> String is growable and utf-8 encoded, and &str only a pointer
-	let mut guess = String::new();
+		// # faq
+		// difference std::string::String and &str (https://stackoverflow.com/a/24159933)
+		// -> String is growable and utf-8 encoded, and &str only a pointer
+		let mut guess = String::new();
 
-	io::stdin()
-		.read_line(&mut guess)
-		.expect("Failed to read line");
+		io::stdin()
+			.read_line(&mut guess)
+			.expect("Failed to read line");
 
-	let guess: u32 = guess.trim().parse().expect("Please type a number!");
+		let guess: u32 = match guess.trim().parse() {
+			Ok(num) => num,
+			Err(_) => {
+				println!("! Invlaid non-numeric input.");
+				continue;
+			}
+		};
 
-	match dbg!(guess).cmp(dbg!(&secret_number)) {
-		Ordering::Less => println!("Too small!"),
-		Ordering::Greater => println!("Too big!"),
-		Ordering::Equal => println!("You win!"),
+		match dbg!(guess).cmp(dbg!(&secret_number)) {
+			Ordering::Less => println!("Too small!"),
+			Ordering::Greater => println!("Too big!"),
+			Ordering::Equal => {
+				println!("You win!");
+				break;
+			}
+		}
 	}
 }
