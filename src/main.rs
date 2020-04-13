@@ -1,17 +1,18 @@
+use std::io;
+
 fn main() {
-	// Suffixed literals, their types are known at initialization
-	let x = 1_u8;
-	let y = 2_u32;
-	let z = 3_f32;
+	println!("Guess the number!");
 
-	// Unsuffixed literal, their types depend on how they are used
-	let i = 1;
-	let f = 1.0;
+	println!("Please input your guess.");
 
-	// `size_of_val` returns the size of a variable in bytes
-	println!("size of `x` (u8) in bytes: {}", std::mem::size_of_val(&x));
-	println!("size of `y` (u32) in bytes: {}", std::mem::size_of_val(&y));
-	println!("size of `z` (f32) in bytes: {}", std::mem::size_of_val(&z));
-	println!("size of `i` in bytes: {}", std::mem::size_of_val(&i));
-	println!("size of `f` in bytes: {}", std::mem::size_of_val(&f));
+	// # faq
+	// difference std::string::String and &str (https://stackoverflow.com/a/24159933)
+	// -> String is growable and utf-8 encoded, and &str only a pointer
+	let mut guess = String::new();
+
+	io::stdin()
+		.read_line(&mut guess)
+		.expect("Failed to read line");
+
+	println!("You guessed: {}", guess);
 }
