@@ -1,11 +1,15 @@
-use std::time::SystemTime;
+use std::thread;
+use std::time::{Duration, SystemTime};
 
 fn main() {
-	let time = match SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
-		Ok(n) => n.as_secs(),
-		Err(_) => panic!("SystemTime before UNIX EPOCH"),
-	};
-	check_divisiblity(time);
+	loop {
+		let time = match SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
+			Ok(n) => n.as_secs(),
+			Err(_) => panic!("SystemTime before UNIX EPOCH"),
+		};
+		check_divisiblity(time);
+		sleep(1)
+	}
 }
 
 fn check_divisiblity(number: u64) {
@@ -20,4 +24,8 @@ fn check_divisiblity(number: u64) {
 	} else {
 		println!("{} is not divisible by 2, 3, 4 or 5", number)
 	}
+}
+
+fn sleep(time: u64) {
+	thread::sleep(Duration::from_secs(time))
 }
