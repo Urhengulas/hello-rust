@@ -2,30 +2,25 @@ use std::thread;
 use std::time::{Duration, SystemTime};
 
 fn main() {
-	loop {
-		let time = match SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
-			Ok(n) => n.as_secs(),
-			Err(_) => panic!("SystemTime before UNIX EPOCH"),
+	let unix_time = match SystemTime::now().duration_since(SystemTime::UNIX_EPOCH) {
+		Ok(n) => n.as_secs(),
+		Err(_) => panic!("SystemTime before UNIX EPOCH"),
+	};
+	dbg!(unix_time);
+
+	// quintuple counter until it is greater or equal to unix_time at start of program
+	let mut counter = 1;
+	let result = loop {
+		if dbg!(counter) >= unix_time {
+			break counter;
 		};
-		check_divisiblity(time);
-		sleep(1)
-	}
+		counter *= 5;
+		sleep(0.1);
+	};
+	dbg!(unix_time);
+	dbg!(result);
 }
 
-fn check_divisiblity(number: u64) {
-	if number % 5 == 0 {
-		println!("{} is divisible by 5", number);
-	} else if number % 4 == 0 {
-		println!("{} is divisible by 4", number);
-	} else if number % 3 == 0 {
-		println!("{} is divisible by 3", number);
-	} else if number % 2 == 0 {
-		println!("{} is divisible by 2", number);
-	} else {
-		println!("{} is not divisible by 2, 3, 4 or 5", number)
-	}
-}
-
-fn sleep(time: u64) {
-	thread::sleep(Duration::from_secs(time))
+fn sleep(time: f64) {
+	thread::sleep(Duration::from_secs_f64(time));
 }
