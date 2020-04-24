@@ -1,40 +1,14 @@
-use std::cmp::Ordering;
-use std::io;
-
-use rand::Rng;
-
 fn main() {
-	println!("Guess the number!");
+	let x = 5;
 
-	let secret_number = dbg!(rand::thread_rng().gen_range(1, 101));
+	let y = {
+		let x = x + 3;
+		x + 1
+	};
 
-	loop {
-		println!("Please input your guess.");
+	println!("The value of y² is: {}", square(y));
+}
 
-		// # faq
-		// difference std::string::String and &str (https://stackoverflow.com/a/24159933)
-		// -> String is growable and utf-8 encoded, and &str only a pointer
-		let mut guess = String::new();
-
-		io::stdin()
-			.read_line(&mut guess)
-			.expect("Failed to read line");
-
-		let guess: u32 = match guess.trim().parse() {
-			Ok(num) => num,
-			Err(_) => {
-				println!("! Invlaid non-numeric input.");
-				continue;
-			}
-		};
-
-		match dbg!(guess).cmp(dbg!(&secret_number)) {
-			Ordering::Less => println!("Too small!"),
-			Ordering::Greater => println!("Too big!"),
-			Ordering::Equal => {
-				println!("You win!");
-				break;
-			}
-		}
-	}
+fn square(x: i32) -> i32 {
+	x * x
 }
