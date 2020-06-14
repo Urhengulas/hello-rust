@@ -1,9 +1,5 @@
 pub trait Summary {
-	fn summarize_author(&self) -> String;
-
-	fn summarize(&self) -> String {
-		format!("(Read more from {}...)", self.summarize_author())
-	}
+	fn summarize(&self) -> String;
 }
 
 pub struct NewsArticle {
@@ -14,12 +10,9 @@ pub struct NewsArticle {
 }
 
 impl Summary for NewsArticle {
-	fn summarize_author(&self) -> String {
-		self.author.clone()
+	fn summarize(&self) -> String {
+		format!("{}, by {} ({})", self.headline, self.author, self.location)
 	}
-	// fn summarize(&self) -> String {
-	// 	format!("{}, by {} ({})", self.headline, self.author, self.location)
-	// }
 }
 
 pub struct Tweet {
@@ -30,12 +23,16 @@ pub struct Tweet {
 }
 
 impl Summary for Tweet {
-	fn summarize_author(&self) -> String {
-		format!("@{}", self.username)
-	}
 	fn summarize(&self) -> String {
 		format!("{}: {}", self.username, self.content)
 	}
+}
+
+pub fn notify<T>(item: &T)
+where
+	T: Summary,
+{
+	println!("Breaking news! {}", item.summarize());
 }
 
 fn main() {
@@ -45,7 +42,7 @@ fn main() {
 		reply: false,
 		retweet: false,
 	};
-	println!("1 new tweet: {}", tweet.summarize());
+	notify(&tweet);
 
 	let article = NewsArticle {
 		headline: String::from("Penguins win the Stanley Cup Championship!"),
@@ -56,5 +53,5 @@ fn main() {
              hockey team in the NHL.",
 		),
 	};
-	println!("New article available! {}", article.summarize());
+	notify(&article);
 }
