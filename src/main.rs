@@ -1,3 +1,5 @@
+use std::mem;
+
 struct CustomSmartPointer {
 	data: String,
 }
@@ -13,6 +15,7 @@ fn main() {
 		data: String::from("A"),
 	};
 	println!("1st");
+
 	{
 		let _b = CustomSmartPointer {
 			data: String::from("B"),
@@ -22,8 +25,15 @@ fn main() {
 		};
 		println!("2nd");
 	}
+
 	let _d = CustomSmartPointer {
 		data: String::from("D"),
 	};
+	let _e = CustomSmartPointer {
+		data: String::from("E"),
+	};
+
+	mem::drop(_d);
+
 	println!("3rd");
 }
