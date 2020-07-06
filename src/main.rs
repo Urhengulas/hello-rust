@@ -1,26 +1,29 @@
-use std::ops::Deref;
-
-#[derive(Debug)]
-struct MyBox<T>(T);
-
-impl<T> MyBox<T> {
-	fn new(x: T) -> MyBox<T> {
-		MyBox(x)
-	}
+struct CustomSmartPointer {
+	data: String,
 }
 
-impl<T> Deref for MyBox<T> {
-	type Target = T;
-
-	fn deref(&self) -> &Self::Target {
-		&self.0
+impl Drop for CustomSmartPointer {
+	fn drop(&mut self) {
+		println!("Dropping CustomSmartPointer with data `{}`!", self.data);
 	}
-}
-
-fn hello(name: &str) {
-	println!("Hello, {}!", name);
 }
 
 fn main() {
-	hello(&MyBox::new(String::from("Deref")));
+	let _a = CustomSmartPointer {
+		data: String::from("A"),
+	};
+	println!("1st");
+	{
+		let _b = CustomSmartPointer {
+			data: String::from("B"),
+		};
+		let _c = CustomSmartPointer {
+			data: String::from("C"),
+		};
+		println!("2nd");
+	}
+	let _d = CustomSmartPointer {
+		data: String::from("D"),
+	};
+	println!("3rd");
 }
