@@ -1,36 +1,16 @@
 #[derive(Debug)]
-enum List {
-	Cons(i32, Box<List>),
-	Nil,
+struct MyBox<T>(T);
+
+impl<T> MyBox<T> {
+	fn new(x: T) -> MyBox<T> {
+		MyBox(x)
+	}
 }
 
-use crate::List::{Cons, Nil};
-
 fn main() {
-	let list = Cons(
-		1,
-		Box::new(Cons(
-			2,
-			Box::new(Cons(
-				3,
-				Box::new(Cons(
-					4,
-					Box::new(Cons(
-						5,
-						Box::new(Cons(
-							6,
-							Box::new(Cons(
-								7,
-								Box::new(Cons(
-									8,
-									Box::new(Cons(9, Box::new(Cons(10, Box::new(Nil))))),
-								)),
-							)),
-						)),
-					)),
-				)),
-			)),
-		)),
-	);
-	dbg!(list);
+	let x = 5;
+	let y = MyBox::new(x);
+
+	assert_eq!(5, x);
+	assert_eq!(5, *y);
 }
