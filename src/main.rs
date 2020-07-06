@@ -17,10 +17,10 @@ impl<T> Deref for MyBox<T> {
 	}
 }
 
-fn main() {
-	let x = 5;
-	let y = MyBox::new(x);
+fn hello(name: &str) {
+	println!("Hello, {}!", name);
+}
 
-	assert_eq!(5, x);
-	assert_eq!(5, *y);
+fn main() {
+	hello(&MyBox::new(String::from("Deref")));
 }
