@@ -1,39 +1,32 @@
-use std::mem;
+use std::fmt;
 
-struct CustomSmartPointer {
-	data: String,
+trait OutlinePrint: fmt::Display + fmt::Debug {
+	fn outline_print(&self) {
+		let output = self.to_string();
+		let len = output.len();
+		println!("{:?}", "*".repeat(len + 4));
+		println!("*{:?}*", " ".repeat(len + 2));
+		println!("* {:?} *", output);
+		println!("*{:?}*", " ".repeat(len + 2));
+		println!("{:?}", "*".repeat(len + 4));
+	}
 }
 
-impl Drop for CustomSmartPointer {
-	fn drop(&mut self) {
-		println!("Dropping CustomSmartPointer with data `{}`!", self.data);
+#[derive(Debug)]
+struct Point {
+	x: i32,
+	y: i32,
+}
+
+impl OutlinePrint for Point {}
+
+impl fmt::Display for Point {
+	fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+		write!(f, "({}, {})", self.x, self.y)
 	}
 }
 
 fn main() {
-	let _a = CustomSmartPointer {
-		data: String::from("A"),
-	};
-	println!("1st");
-
-	{
-		let _b = CustomSmartPointer {
-			data: String::from("B"),
-		};
-		let _c = CustomSmartPointer {
-			data: String::from("C"),
-		};
-		println!("2nd");
-	}
-
-	let _d = CustomSmartPointer {
-		data: String::from("D"),
-	};
-	let _e = CustomSmartPointer {
-		data: String::from("E"),
-	};
-
-	mem::drop(_d);
-
-	println!("3rd");
+	let p = Point { x: 1, y: 3 };
+	p.outline_print();
 }
