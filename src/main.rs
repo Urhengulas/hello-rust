@@ -1,10 +1,39 @@
-#[derive(Debug)]
-enum Status {
-	Value(u32),
-	Stop,
+#[derive(Debug, Default)]
+pub struct AveragedCollection {
+	list: Vec<i32>,
+	average: f64,
+}
+
+impl AveragedCollection {
+	pub fn new() -> Self {
+		Self::default()
+	}
+
+	pub fn add(&mut self, value: i32) {
+		self.list.push(value);
+		self.update_average();
+	}
+
+	pub fn remove(&mut self) -> Option<i32> {
+		let result = self.list.pop();
+		match result {
+			Some(value) => {
+				self.update_average();
+				Some(value)
+			}
+			None => None,
+		}
+	}
+
+	pub fn average(&self) -> f64 {
+		self.average
+	}
+
+	fn update_average(&mut self) {
+		let total: i32 = self.list.iter().sum();
+		self.average = total as f64 / self.list.len() as f64;
+	}
 }
 fn main() {
-    let mut list_of_statuses: Vec<Status> = (0u32..20).map(Status::Value).collect();
-    list_of_statuses.push(Status::Stop);
-	dbg!(list_of_statuses);
+	let a = AveragedCollection::new();
 }
