@@ -1,39 +1,43 @@
-#[derive(Debug, Default)]
-pub struct AveragedCollection {
-	list: Vec<i32>,
-	average: f64,
+pub trait Draw {
+	fn draw(&self);
 }
 
-impl AveragedCollection {
-	pub fn new() -> Self {
-		Self::default()
-	}
-
-	pub fn add(&mut self, value: i32) {
-		self.list.push(value);
-		self.update_average();
-	}
-
-	pub fn remove(&mut self) -> Option<i32> {
-		let result = self.list.pop();
-		match result {
-			Some(value) => {
-				self.update_average();
-				Some(value)
-			}
-			None => None,
+#[derive(Default)]
+pub struct Screen {
+	pub components: Vec<Box<dyn Draw>>,
+}
+impl Screen {
+	pub fn run(&self) {
+		for component in self.components.iter() {
+			component.draw();
 		}
 	}
+}
 
-	pub fn average(&self) -> f64 {
-		self.average
-	}
-
-	fn update_average(&mut self) {
-		let total: i32 = self.list.iter().sum();
-		self.average = total as f64 / self.list.len() as f64;
+#[derive(Debug)]
+pub struct Button {
+	pub width: u32,
+	pub height: u32,
+	pub label: String,
+}
+impl Draw for Button {
+	fn draw(&self) {
+		println!("Draw {:?} on screen", self);
 	}
 }
+
 fn main() {
-	let a = AveragedCollection::new();
+	let mut s = Screen::default();
+	s.components.push(Box::new(Button {
+		width: 4,
+		height: 5,
+		label: "sign-up".to_string(),
+	}));
+	s.components.push(Box::new(Button {
+		width: 10,
+		height: 3,
+		label: "sign-in".to_string(),
+	}));
+
+	s.run();
 }
